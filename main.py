@@ -14,6 +14,8 @@ def add_todo():
         todos_list.append(new_todo)
         fc.store_todos(todos_list, list_dir)
         st.session_state["new_todo"] =""
+    else:
+        st.session_state["new_todo"] = ""
 
 
 # Interface
@@ -32,7 +34,12 @@ del_cat_button = st.sidebar.button("Delete", key="del_cat")
 
 if del_cat_button:
     if len(new_cat.strip()) > 1:
-        if new_cat.strip() != categories[0] and new_cat.strip() in categories:
+        if new_cat.strip() == categories[0]:
+            del st.session_state['add_del_category']
+            st.session_state["add_del_category"] = ""
+            st.experimental_rerun()
+
+        elif new_cat.strip() != categories[0] and new_cat.strip() in categories:
             categories.remove(new_cat)
             os.remove(f"{new_cat}.txt")
             categories = (cat.title() + "\n" for cat in categories)
@@ -42,7 +49,7 @@ if del_cat_button:
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
 
-        if not new_cat.strip()  in categories:
+        elif not new_cat.strip()  in categories:
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
@@ -54,7 +61,12 @@ if del_cat_button:
 
 if save_cat_button:
     if len(new_cat.strip()) > 1:
-        if not os.path.exists(f'{new_cat}.txt'):
+        if new_cat.strip() == categories[0]:
+            del st.session_state['add_del_category']
+            st.session_state["add_del_category"] = ""
+            st.experimental_rerun()
+
+        elif not os.path.exists(f'{new_cat}.txt'):
             categories.append(new_cat)
             categories = (cat.title() + "\n" for cat in categories)
             fc.store_todos(categories, "cat.txt")
@@ -80,21 +92,21 @@ completed_bar = st.sidebar.selectbox("Completed Tasks", list(completed), key="co
 delete_option = st.sidebar.button("Delete", key='delete')
 save_option = st.sidebar.button("Save", key="save")
 
+if completed_bar:
+    if delete_option:
+        completed.remove(st.session_state['complete'])
+        fc.store_todos(completed, completed_dir)
+        del st.session_state['complete']
+        st.experimental_rerun()
 
-if delete_option:
-    completed.remove(st.session_state['complete'])
-    fc.store_todos(completed, completed_dir)
-    del st.session_state['complete']
-    st.experimental_rerun()
+    if save_option:
+        todos_list.append(st.session_state['complete'])
+        fc.store_todos(todos_list, list_dir)
 
-if save_option:
-    todos_list.append(st.session_state['complete'])
-    fc.store_todos(todos_list, list_dir)
-
-    completed.remove(st.session_state['complete'])
-    fc.store_todos(completed, completed_dir)
-    del st.session_state['complete']
-    st.experimental_rerun()
+        completed.remove(st.session_state['complete'])
+        fc.store_todos(completed, completed_dir)
+        del st.session_state['complete']
+        st.experimental_rerun()
 
 
 ## Check boxes and input box
