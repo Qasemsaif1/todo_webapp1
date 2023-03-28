@@ -19,8 +19,6 @@ def add_todo():
 
 
 # Interface
-st.set_page_config()
-
 st.title("To Do APP")
 st.markdown("---")
 st.markdown("""<style> .css-cio0dv.egzxvld1
