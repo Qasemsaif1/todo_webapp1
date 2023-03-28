@@ -3,8 +3,8 @@ import function as fc
 import os
 
 # Modules
-categories = list(cat.strip() for cat in fc.get_todos("cat.txt"))
-completed_dir = 'completed.txt'
+categories = list(cat.strip() for cat in fc.get_todos("lists/cat.txt"))
+completed_dir = 'lists/completed.txt'
 fc.opendir(categories, completed_dir)
 
 completed = fc.get_todos(completed_dir)
@@ -41,15 +41,15 @@ if del_cat_button:
 
         elif new_cat.strip() != categories[0] and new_cat.strip() in categories:
             categories.remove(new_cat)
-            os.remove(f"{new_cat}.txt")
+            os.remove(f"lists/{new_cat}.txt")
             categories = (cat.title() + "\n" for cat in categories)
-            fc.store_todos(categories, "cat.txt")
+            fc.store_todos(categories, "lists/cat.txt")
 
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
 
-        elif not new_cat.strip()  in categories:
+        elif not new_cat.strip() in categories:
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
@@ -60,16 +60,16 @@ if del_cat_button:
         st.experimental_rerun()
 
 if save_cat_button:
-    if len(new_cat.strip()) > 1 or new_cat == "Home" :
+    if len(new_cat.strip()) > 1 or new_cat.strip() == "Home":
         if new_cat.strip() == categories[0]:
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
 
-        elif not os.path.exists(f'{new_cat}.txt'):
+        elif not os.path.exists(f'lists/{new_cat}.txt'):
             categories.append(new_cat)
             categories = (cat.title() + "\n" for cat in categories)
-            fc.store_todos(categories, "cat.txt")
+            fc.store_todos(categories, "lists/cat.txt")
 
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
@@ -83,7 +83,7 @@ if save_cat_button:
 ##  View/Choose categories
 st.sidebar.selectbox(label="Categories", options=(list(categories)), key="chosen_category")
 
-list_dir = f'{st.session_state["chosen_category"]}.txt'
+list_dir = f'lists/{st.session_state["chosen_category"]}.txt'
 todos_list = fc.get_todos(list_dir)
 
 
