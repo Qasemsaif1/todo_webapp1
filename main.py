@@ -4,9 +4,10 @@ import os
 
 # Modules
 categories = list(cat.strip() for cat in fc.get_todos("cat.txt"))
-completed_dir = 'completed_tasks.txt'
+completed_dir = 'completed.txt'
 fc.opendir(categories, completed_dir)
 
+completed = fc.get_todos(completed_dir)
 
 def add_todo():
     new_todo = st.session_state["new_todo"].title()+ "\n"
@@ -59,7 +60,7 @@ if del_cat_button:
         st.experimental_rerun()
 
 if save_cat_button:
-    if len(new_cat.strip()) > 1:
+    if len(new_cat.strip()) > 1 or new_cat == "Home" :
         if new_cat.strip() == categories[0]:
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
@@ -73,21 +74,22 @@ if save_cat_button:
             del st.session_state['add_del_category']
             st.session_state["add_del_category"] = ""
             st.experimental_rerun()
-    else:
-        del st.session_state['add_del_category']
-        st.session_state["add_del_category"] = ""
-        st.experimental_rerun()
+
+        else:
+            del st.session_state['add_del_category']
+            st.session_state["add_del_category"] = ""
+            st.experimental_rerun()
 
 ##  View/Choose categories
 st.sidebar.selectbox(label="Categories", options=(list(categories)), key="chosen_category")
 
 list_dir = f'{st.session_state["chosen_category"]}.txt'
 todos_list = fc.get_todos(list_dir)
-completed = fc.get_todos(completed_dir)
+
 
 
 ### Show Completed Tasks
-completed_bar = st.sidebar.selectbox("Completed Tasks", list(completed), key="complete")
+completed_bar = st.sidebar.selectbox("Completed Tasks", options=list(completed), key="complete")
 delete_option = st.sidebar.button("Delete", key='delete')
 save_option = st.sidebar.button("Save", key="save")
 
@@ -113,7 +115,7 @@ for index, todo in enumerate(todos_list):
     check_box = st.checkbox(todo, key=f'{todo}+{index}')
     if check_box:
         completed.append(todo)
-        fc.store_todos(completed, 'Completed_tasks.txt')
+        fc.store_todos(completed, completed_dir)
 
         todos_list.pop(index) # this line will delete the to do checked in the list above.
         fc.store_todos(todos_list, list_dir)
