@@ -19,8 +19,8 @@ completed_dir = ""
 
 def opendir(categories, completed_dir):
     for dirr in categories:
-        if not os.path.exists(f'{dirr}.txt'):
-            with open(f'{dirr}.txt', "w") as file:
+        if not os.path.exists(f'lists/{dirr}.txt'):
+            with open(f'lists/{dirr}.txt', "w") as file:
                 pass
     if not os.path.exists(completed_dir ):
         with open(completed_dir , "w") as file:
