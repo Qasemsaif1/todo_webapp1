@@ -19,6 +19,7 @@ def add_todo():
 
 
 # Interface
+st.set_page_config()
 
 st.title("To Do APP")
 st.markdown("---")
@@ -122,7 +123,5 @@ for index, todo in enumerate(todos_list):
         st.experimental_rerun()
 
 
-
 st.text_input(label="", placeholder="Write a task here....",
               key="new_todo", on_change=add_todo)
-
