@@ -20,7 +20,7 @@ def add_todo():
 
 
 # Interface
-st.title("To Do APP")
+st.title("To Do List")
 st.markdown("---")
 st.markdown("""<style> .css-cio0dv.egzxvld1
 {visibility: hidden;} </style> """, unsafe_allow_html=True)
